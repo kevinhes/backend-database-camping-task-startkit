@@ -243,7 +243,7 @@ values
 
 -- 5-4. 查詢：取得王小明所有的預約紀錄，包含取消預約的紀錄
 select * from "COURSE_BOOKING"
-where user_id = ( select id from "USER" where email = 'wXlTq@hexschooltest.io' )
+where user_id = ( select id from "USER" where email = 'wXlTq@hexschooltest.io' );
 
 -- 5-5. 修改：`王小明` 現在已經加入直播室了，請在`COURSE_BOOKING`更新該筆預約資料（請注意，不要更新到已經取消的紀錄）：
     -- 1. 請在該筆預約記錄他的加入直播室時間 `join_at` 設為2024-11-25 14:01:59
@@ -255,7 +255,7 @@ where
 AND
   course_id = ( select id from "COURSE" where user_id = ( select id from "USER" where email = 'lee2000@hexschooltest.io' ) )
 AND
-	status  = '即將授課'
+	status  = '即將授課';
 -- 5-6. 查詢：計算用戶王小明的購買堂數，顯示須包含以下欄位： user_id , total。 (需使用到 SUM 函式與 Group By)
 select
   user_id,
@@ -270,6 +270,18 @@ group by
 
 
 -- 5-7. 查詢：計算用戶王小明的已使用堂數，顯示須包含以下欄位： user_id , total。 (需使用到 Count 函式與 Group By)
+select
+  user_id,
+  count(*) AS 已使用堂數
+from
+  "COURSE_BOOKING"
+where
+  user_id = ( select id from "USER" where email = 'wXlTq@hexschooltest.io' )
+AND
+  status != '課程已取消'
+group by
+  user_id;
+
 
 -- 5-8. [挑戰題] 查詢：請在一次查詢中，計算用戶王小明的剩餘可用堂數，顯示須包含以下欄位： user_id , remaining_credit
     -- 提示：
